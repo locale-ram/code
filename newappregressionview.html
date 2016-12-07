@@ -1,0 +1,272 @@
+<html>
+
+<HEAD>
+<meta charset="ISO-8859-1">
+<TITLE>Test Monitor</TITLE>
+<META http-equiv=Content-Type content="text/html">
+<link rel="stylesheet" href="css/monitor.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="screen" />  
+
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>  
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="js/highcharts/highcharts.js"></script>
+	<script type="text/javascript" src="js/highcharts/highcharts-3d.js"></script>
+    <script type="text/javascript" src="js/highcharts/exporting.js"></script>      
+
+<script type="text/javascript" src="js/RGraph/libraries/RGraph.common.core.js"></script>
+<script type="text/javascript" src="js/RGraph/libraries/RGraph.common.key.js"></script>
+<script type="text/javascript" src="js/RGraph/libraries/RGraph.common.tooltips.js"></script>
+<script type="text/javascript" src="js/RGraph/libraries/RGraph.common.dynamic.js"></script>
+<script type="text/javascript" src="js/RGraph/libraries/RGraph.common.effects.js"></script>
+<script type="text/javascript" src="js/RGraph/libraries/RGraph.pie.js"></script>
+<script type="text/javascript" src="js/RGraph/libraries/RGraph.bar.js"></script>
+<script type="text/javascript" src="js/trail/initMonitor.js"></script> 
+<script type="text/javascript" src="js/trail/monitor3.js"></script>   
+<script type="text/javascript" src="js/trail/monitorFilter.js"></script>   
+<script type="text/javascript" src="js/trail/historyMonitor.js"></script>   
+        
+<style type="text/css"> 
+  
+	#msg {
+	    position: fixed;
+	    top: 1em;   
+	    left: 1em;
+	}
+	
+	#loadingDiv {
+	    position: fixed;   
+	    top: 50%;
+	    left: 50%;
+	    margin-top: -50px;
+	    margin-left: -150px;      
+	}
+	
+	.boxes {   
+	    border-radius: 5px;
+	    border: 2px solid #888888; 
+	    padding: 8px;     
+	    background-color: #E8E8E8;  
+	} 
+	
+	#filters {   
+	    border-radius: 5px;
+	    border: 2px solid #888888; 
+	    padding: 8px;     
+	} 
+	
+	.center {
+	    margin: auto;
+	} 
+	
+	.reload:active {
+	   -moz-box-shadow:    inset 0 0 10px #000000;
+	   -webkit-box-shadow: inset 0 0 10px #000000;
+	   box-shadow:         inset 0 0 10px #000000;
+	}  
+	  
+	.reload {
+		border-radius: 25px;      
+		
+		-webkit-box-shadow: 0 8px 6px -6px black; 
+		-moz-box-shadow: 0 8px 6px -6px black; 
+		box-shadow: 0 8px 6px -6px black;
+	} 
+	
+	#overlay {
+	     visibility: hidden;
+	     position: absolute;
+	     left: 0px;
+	     top: 0px;
+	     width:100%; 
+	     height:100%    
+	     text-align:center;
+	     z-index: 1000;
+	     
+    	 background-color: rgba(138,138,138,0.5);  
+	}
+	
+	#overlay div {
+	     margin: 100px auto;
+	     background-color: white;
+	     border:1px solid #000;   
+	     padding:15px;    
+	     
+	     width:80%;     
+	}
+	
+	a.boxclose{
+	    float:right;
+	    margin-top:-27px;
+	    margin-right:-27px;
+	    cursor:pointer;
+	    color: #fff;
+	    border: 1px solid #AEAEAE;
+	    border-radius: 30px;
+	    background: #605F61;
+	    font-size: 31px;
+	    font-weight: bold;
+	    display: inline-block;
+	    line-height: 0px;
+		
+	    padding: 10px 6px 12px;
+	    
+		-webkit-box-shadow: 0 10px 6px -6px black; 
+		-moz-box-shadow: 0 10px 6px -6px black;         
+		box-shadow: 0 10px 6px -6px black;       
+	}
+	
+	a.boxclose:hover {   
+	 	background: red;   
+	    -moz-box-shadow:    inset 0 0 10px #000000;
+	    -webkit-box-shadow: inset 0 0 10px #000000; 
+	    box-shadow:         inset 0 0 10px #000000;   
+	}     
+	
+	.boxclose:before { 
+	    content: 'x'; 
+		font-size: 62%; 
+	} 	
+	
+	body:hover { 
+		cursor : context-menu;  
+	}
+	
+	tr:hover {            
+		background-color : #DBDBDB;       
+	}
+	
+	.zoom td:first-child:hover {                   
+		zoom: 1.1;  
+	    -moz-transform: scale(1.1);
+	    -moz-transform-origin: 0 0;
+	    -o-transform: scale(1.1);
+	    -o-transform-origin: 0 0;  
+	    -webkit-transform: scale(1.1);     
+	    -webkit-transform-origin: 0 0;
+	    transform: scale(1.1); /* Standard Property */  
+	    transform-origin: 0 0;  /* Standard Property */ 
+	    
+	    padding-top: 0px;  
+	    position: relative;     
+ 	} 
+	
+	.minibutton {
+		border-width: 1px; 
+		border-radius: 5px;    
+	}
+	  
+	.minibutton:active {
+	   -moz-box-shadow:    inset 0 0 10px #000000;
+	   -webkit-box-shadow: inset 0 0 10px #000000;
+	   box-shadow:         inset 0 0 10px #000000;
+	   
+	   background-color : #DBDBDB;  
+	} 
+	
+</style>  
+
+</HEAD>
+<BODY style="position: relative;">    
+ 
+	<input type="hidden" id="parentType" value="Regression" /> 
+	
+	<div class="container">               
+		<img src="images/logo_eco_green_orig_en-2x.png" align="center" />
+
+		  <div class="row">     
+				<div class="span4" style="margin-top: 0px;">      
+					<div class="btn-toolbar center boxes" style="margin-top: 13px; height: 35px; vertical-align: middle;">   
+						<div class="btn-group" style="vertical-align: middle; margin-top: 2px;">
+							<button id="nextEnv" class="btn processBtn" style="margin-left: 10px; vertical-align: middle;">Next Env</button>      
+							<button id="next" class="btn processBtn" style="vertical-align: middle; ">Next</button>    
+						</div>    
+						<div class="btn-group" style="vertical-align: middle;  margin-top: 2px;">  
+							<button id="play" class="btn processBtn" style="vertical-align: middle;">Play</button>
+							<button id="pause" class="btn processBtn" style="vertical-align: middle;">Pause</button>    
+						</div> 
+					</div>   
+				</div>  
+			</div>    
+				
+			<div class="row">     
+				<div class="span3" style="margin-top: 10px;">     
+					<label>Project : </label>    
+					<select id="projectNames" class="field1">  
+					</select> 
+				</div>
+				<div class="span3" style="margin-top: 10px;">     
+					<label>Environment : </label>    
+					<select id="envNames" class="dropField field2">  
+					</select> 
+				</div>
+				<div class="span3" style="margin-top: 10px;">     
+					<label>Platform : </label>    
+					<select id="platformNames" class="dropField field3">    
+					</select> 
+				</div>
+				<div class="span3" style="margin-top: 10px;">
+					<label>Plan Name : </label>     
+					<select id="planNames" class="dropField field4">     
+					</select> 
+				</div>
+			</div>    
+			
+			<div class="row">     
+				<div class="span10"></div>    
+				<div class="span2" align="right">                      
+					<button id="filter" class="btn processBtn">Search</button>            
+				</div> 
+			</div>    
+		 
+ 		<hr style="margin-bottom: 0px;" />     
+		
+		<div class="row">
+			<div class="span4">       
+				<div id="loadingDiv" class="alert alert-success" style="display: none;"></div>
+			</div>  
+			<div class="span8">    
+				<div id="msg" class="alert alert-success" style="display: none;"></div>
+			</div>      
+		</div>
+		
+		<div class="row">     
+			<div class="span1">       
+				<button class="btn reload" style="position: fixed; top: 1em; right: 1em;">Reload</button>               
+			</div> 
+		</div>
+		
+		<h3 id="name" align="center"></h3>  
+		<h3 id="error" align="center"></h3>   
+		<div class="dispGraph">  
+			<canvas id="cvs1" width="800" height="250" style="margin-left: 60px; margin-bottom: 15px; horizontal-align: middle;">[No canvas support]</canvas>
+		</div>
+		  
+		<table class="span12" align="center" id="resultTable" style="margin-bottom: 15px;"></table>     
+		      
+		<div id="enableHistory" style="float:right; margin-top: 0px; display: none;">
+			<button class="btn" id="viewHistory" onclick="openHistoryReport();" style="float:right; margin-top: 0px; margin-bottom: 20px;">View History</button>
+		</div>           
+		              
+		<div id="overlay">                                       
+		     <div style="margin-top: 105px; margin-bottom: 50px;">
+		                             
+		        <a class="boxclose" onclick="overlay();" style="text-decoration: none;"></a>              
+		        <br/>  
+				<div id="cont" style="position:relative; margin-bottom: 0px; margin-top: 0px; padding-bottom: 0px; background-color : #C0C0C0;"></div>                     
+				<br/>      
+				
+				<label class="" style="float: right; margin-right: 0px; margin-bottom: 0px; padding-right: 135px;">Build History : </label>
+				<br/>        
+				<select id="buildNoField" class="dropField" style="float:right;"></select>         
+				<table id="historyTable" align="center"></table>      
+				
+		     </div>   
+		</div>  
+  
+	</div> 
+</BODY>
+
+</html> 
+
